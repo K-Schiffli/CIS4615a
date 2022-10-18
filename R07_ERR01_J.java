@@ -1,10 +1,24 @@
 public class R07_ERR01_J {
     class ExceptionExample {
-        public static void main(String[] args) throws FileNotFoundException {
-            // Linux stores a user's home directory path in
-            // the environment variable $HOME, Windows in %APPDATA%
-            FileInputStream fis =
-                    new FileInputStream(System.getenv("APPDATA") + args[0]);
+        public static void main(String[] args) {
+            File file = null;
+            try {
+                file = new File(System.getenv("APPDATA") +
+                        args[0]).getCanonicalFile();
+                if (!file.getPath().startsWith("c:\\homepath")) {
+                    System.out.println("Invalid file");
+                    return;
+                }
+            } catch (IOException x) {
+                System.out.println("Invalid file");
+                return;
+            }
+            try {
+                FileInputStream fis = new FileInputStream(file);
+            } catch (FileNotFoundException x) {
+                System.out.println("Invalid file");
+                return;
+            }
         }
     }
 }
